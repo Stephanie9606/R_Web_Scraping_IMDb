@@ -153,10 +153,20 @@ oscar_df %>%
 oscar_movies
 ```
 
-1. Show a summary of the number of data elements for each movie that are not NA. Which two elements are missing the most from the movies?
 ```{r}
-
+oscar_movies %>%
+  mutate(rank = parse_number(rank),
+         year = parse_number(year),
+         genre = str_replace_all(genre, "\\n", ""),
+         genre = str_squish(genre),
+         metascore = parse_number(metascore),
+         movienum = NULL) ->
+  oscar_movies
+oscar_movies
 ```
+
+1. Show a summary of the number of data elements for each movie that are not NA. Which two elements are missing the most from the movies?
+
 
 2. Create a plot of the length of a film and its gross, color coded by rating. Show linear smoothers for each rating.
 - Does MPAA rating matter?  
