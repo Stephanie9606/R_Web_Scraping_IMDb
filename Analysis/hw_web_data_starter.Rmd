@@ -44,7 +44,7 @@ Scrape the following elements, convert the data into a tibble, tidy it, and clea
 Convert the data into a tibble, tidy it, and clean it to answer the following questions:
 
 ```{r}
-html_obj <- read_html("Best Picture-Winning (Sorted by Year Descending) - IMDb.htm")
+html_obj <- read_html("Best_Picture_ IMDb.html")
 html_obj
 ```
 
@@ -101,20 +101,17 @@ oscar_df %>%
   mutate(isyear = str_detect(text, "\\(\\d+\\)")) ->
   oscar_df
 
-# define MPAA ratings
-oscar_df %>% 
-  mutate(ismpaa = str_detect(text, "^GP|PG|PG-13|[R]$")) ->
-  oscar_df
-# oscar_df %>% 
-#  filter(ismpaa == T) %>% 
-#  nrow()
+# define MPAA ratings (last step)
 
 # define length in minutes
 oscar_df %>% 
   mutate(islength = str_detect(text, "^\\d+\\smin$")) ->
   oscar_df
 
-# define genre (last step)
+# define genre
+oscar_df %>% 
+  mutate(isgenre = str_detect(text, "^\\n")) ->
+  oscar_df
 
 # define star ratings
 oscar_df %>% 
@@ -131,9 +128,9 @@ oscar_df %>%
   mutate(isgross = str_detect(text, "^\\$\\d+\\.\\d+M$")) ->
   oscar_df
 
-# define genre
+# define MPAA
 oscar_df %>% 
-  mutate(isgenre = !ismovierank & !isname & !isyear & !ismpaa & !islength & !isstar & !ismeta & !isgross) ->
+  mutate(ismpaa = !ismovierank & !isname & !isyear & !isgenre & !islength & !isstar & !ismeta & !isgross) ->
   oscar_df
 ```
 
