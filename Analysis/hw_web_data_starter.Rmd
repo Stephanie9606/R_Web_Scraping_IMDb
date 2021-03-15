@@ -23,6 +23,7 @@ urlcolor: blue
 ```{r}
 library(tidyverse)
 library(rvest)
+library(ggplot2)
 ```
 
 # IMDB List of Oscar Winners
@@ -157,9 +158,12 @@ oscar_movies
 oscar_movies %>%
   mutate(rank = parse_number(rank),
          year = parse_number(year),
+         length = parse_number(length),
          genre = str_replace_all(genre, "\\n", ""),
          genre = str_squish(genre),
+         star_rating = parse_number(star_rating),
          metascore = parse_number(metascore),
+         gross = parse_number(gross),
          movienum = NULL) ->
   oscar_movies
 oscar_movies
@@ -173,8 +177,26 @@ oscar_movies %>%
 ```
 
 2. Create a plot of the length of a film and its gross, color coded by rating. Show linear smoothers for each rating.
-- Does MPAA rating matter?  
+- Does MPAA rating matter? Based on the plot, we can see that movies that are rated as "PG-13" of MPAA rating, the longer the movies are, the gross receipts are higher
+```{r}
+# for star_rating
+oscar_movies %>% 
+  ggplot(aes(x = length, y = gross, col = star_rating)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = lm)
 
+# for metascore rating
+oscar_movies %>% 
+  ggplot(aes(x = length, y = gross, col = metascore)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = lm)
+
+# for MPAA rating
+oscar_movies %>% 
+  ggplot(aes(x = length, y = gross, col = mpaa)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = lm)
+```
 
 3. Create a plot with a single Ordinary Least Squares smoothing line with no standard errors showing for predicting stars rating based on metacritic scores for those movies that have metacritic scores. 
 - Use a linear model to assess if there is there a meaningful relationship. Show the summary of the output and interpret in terms of the $p$-value and the adjusted R-Squared?
