@@ -177,7 +177,7 @@ oscar_movies %>%
 ```
 
 2. Create a plot of the length of a film and its gross, color coded by rating. Show linear smoothers for each rating.
-- Does MPAA rating matter? Based on the plot, we can see that movies that are rated as "PG-13" of MPAA rating, the longer the movies are, the gross receipts are higher
+- Does MPAA rating matter? Based on the plot, we can see that movies are rated as "PG-13" of MPAA rating, the longer the movies are, the gross receipts are higher
 ```{r}
 # for star_rating
 oscar_movies %>% 
