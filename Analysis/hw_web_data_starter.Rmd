@@ -217,7 +217,31 @@ summary(reg.out)
   + Which R-rated movies are in the overall top 10 of gross receipts?
   + Use one-way analysis of variance to assess the level of evidence for whether all ratings have the same mean gross receipts. Show the summary of the results and provide your interpretation of the results.
 ```{r}
+oscar_movies %>% 
+  ggplot(aes(x = mpaa, y = gross)) +
+  geom_point() +
+  ggtitle("Gross Receipts vs MPAA Rating") +
+  xlab("MPAA Rating") +
+  ylab("Gross Receipts")
 
+# Which MPAA rating has the highest median gross receipts? PG-13
+oscar_movies %>% 
+  filter(!is.na(gross)) %>% 
+  group_by(mpaa) %>% 
+  summarise(median_gross = median(gross)) %>% 
+  arrange(desc(median_gross))
+
+# Which R-rated movies are in the overall top 10 of gross receipts? Gladiator, Rain Man
+oscar_movies %>% 
+  select(movie, mpaa, gross) %>% 
+  arrange(desc(gross)) %>% 
+  slice(1:10) %>% 
+  filter(mpaa == "R")
+
+# ANOVA
+# interpret: p-value is 0.0001579 < 0.05, so we have enough evidence to reject null hypothesis which all ratings have the same mean gross receipts. Not all means are equal (at least one pair of means is not equal)
+model.fit = lm(gross~mpaa, data = oscar_movies)
+anova(model.fit)
 ```
 
 # Extra Credit 1 Pts
