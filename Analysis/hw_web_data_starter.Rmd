@@ -169,7 +169,7 @@ oscar_movies %>%
 oscar_movies
 ```
 
-1. Show a summary of the number of data elements for each movie that are not NA. Which two elements are missing the most from the movies?
+1. Show a summary of the number of data elements for each movie that are not NA. Which two elements are missing the most from the movies? Metascore Rating and Gross Receipts
 ```{r}
 oscar_movies %>% 
   is.na() %>% 
@@ -199,14 +199,26 @@ oscar_movies %>%
 ```
 
 3. Create a plot with a single Ordinary Least Squares smoothing line with no standard errors showing for predicting stars rating based on metacritic scores for those movies that have metacritic scores. 
-- Use a linear model to assess if there is there a meaningful relationship. Show the summary of the output and interpret in terms of the $p$-value and the adjusted R-Squared?
+- Use a linear model to assess if there is a meaningful relationship. Show the summary of the output and interpret in terms of the $p$-value and the adjusted R-Squared?
+```{r}
+oscar_movies %>% 
+  ggplot(aes(x = metascore, y = star_rating)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = lm)
 
+reg.out <- lm(star_rating~metascore, data = oscar_movies)
+summary(reg.out)
+# p-value < 0.05, meaning there is a relationship between star and metascore ratings
+# adjusted R-squared 0.08059 
+```
 
 4. Use an appropriate plot to compare the gross receipts by MPAA rating.
   + Which MPAA rating has the highest median gross receipts? 
   + Which R-rated movies are in the overall top 10 of gross receipts?
   + Use one-way analysis of variance to assess the level of evidence for whether all ratings have the same mean gross receipts. Show the summary of the results and provide your interpretation of the results.
+```{r}
 
+```
 
 # Extra Credit 1 Pts
 
