@@ -19,11 +19,43 @@ urlcolor: blue
 
 - Pick a website of your choice (not discussed in class) that requires a free API key to download a data set. Convert elements of interest into a tibble and create a graph to answer a question of interest.
 - State the question and interpret the plot.
-
 ```{r}
 library(tidyverse)
 library(rvest)
 library(ggplot2)
+```
+
+```{r}
+library(keyring)
+# key_set("spotify_stephyspotifyr_client_id")
+# key_set("spotify_stephyspotifyr_client_secret")
+
+library(spotifyr)
+Sys.setenv(SPOTIFY_CLIENT_ID = '94cebeda515b414e8b9fe12c8118adbe')
+Sys.setenv(SPOTIFY_CLIENT_SECRET = '8df29b1e87fd42cb88cdbbdb0ed408de')
+
+#access_token <- get_spotify_access_token(
+#  client_id = key_get("spotify_stephyspotifyr_client_id"),
+#  client_secret = key_get("spotify_stephyspotifyr_client_secret")
+#)
+
+access_token <- get_spotify_access_token(
+  client_id = Sys.getenv("SPOTIFY_CLIENT_ID"),
+  client_secret = Sys.getenv("SPOTIFY_CLIENT_SECRET")
+)
+
+# Question: Is there a relationship between songs' pitch and the valence of Taylor Swift's albums?
+# Based on the plot and the regression model we can conclude that there is significant positive coefficient between key and valence
+taylorswift <- get_artist_audio_features('Taylor Swift', authorization = get_spotify_access_token())
+taylorswift %>% 
+  ggplot(aes(x = valence, y = key)) +
+  geom_smooth(se = F) +
+  ggtitle("Key vs Valence of Taylor Swift's Albums") +
+  xlab("Valence (Joy)") +
+  ylab("Key (Pitch)")
+
+spreg.out <- lm(valence~key, data = taylorswift)
+summary(spreg.out)
 ```
 
 # IMDB List of Oscar Winners
@@ -177,25 +209,15 @@ oscar_movies %>%
 ```
 
 2. Create a plot of the length of a film and its gross, color coded by rating. Show linear smoothers for each rating.
-- Does MPAA rating matter? Based on the plot, we can see that movies are rated as "PG-13" of MPAA rating, the longer the movies are, the gross receipts are higher
+- Does MPAA rating matter? Based on the plot, we can see that movies are rated as "PG-13" and PG has significant positive coefficient with gross receipts
 ```{r}
-# for star_rating
-oscar_movies %>% 
-  ggplot(aes(x = length, y = gross, col = star_rating)) +
-  geom_point() +
-  geom_smooth(se = FALSE, method = lm)
-
-# for metascore rating
-oscar_movies %>% 
-  ggplot(aes(x = length, y = gross, col = metascore)) +
-  geom_point() +
-  geom_smooth(se = FALSE, method = lm)
-
-# for MPAA rating
 oscar_movies %>% 
   ggplot(aes(x = length, y = gross, col = mpaa)) +
   geom_point() +
-  geom_smooth(se = FALSE, method = lm)
+  geom_smooth(se = FALSE, method = lm) +
+  ggtitle("Gross Receipts vs Length") +
+  xlab("Length") +
+  ylab("Gross Receipts")
 ```
 
 3. Create a plot with a single Ordinary Least Squares smoothing line with no standard errors showing for predicting stars rating based on metacritic scores for those movies that have metacritic scores. 
@@ -208,8 +230,8 @@ oscar_movies %>%
 
 reg.out <- lm(star_rating~metascore, data = oscar_movies)
 summary(reg.out)
-# p-value < 0.05, meaning there is a relationship between star and metascore ratings
-# adjusted R-squared 0.08059 
+# p-value < 0.05, meaning there is a significant relationship between star and metascore ratings
+# adjusted R-squared 0.08059, approximately 8% of the model is explained by the model, not a good model
 ```
 
 4. Use an appropriate plot to compare the gross receipts by MPAA rating.
@@ -219,7 +241,7 @@ summary(reg.out)
 ```{r}
 oscar_movies %>% 
   ggplot(aes(x = mpaa, y = gross)) +
-  geom_point() +
+  geom_boxplot() +
   ggtitle("Gross Receipts vs MPAA Rating") +
   xlab("MPAA Rating") +
   ylab("Gross Receipts")
