@@ -31,8 +31,8 @@ library(keyring)
 # key_set("spotify_stephyspotifyr_client_secret")
 
 library(spotifyr)
-Sys.setenv(SPOTIFY_CLIENT_ID = '94cebeda515b414e8b9fe12c8118adbe')
-Sys.setenv(SPOTIFY_CLIENT_SECRET = '8df29b1e87fd42cb88cdbbdb0ed408de')
+#Sys.setenv(SPOTIFY_CLIENT_ID = '94cebeda515b414e8b9fe12c8118adbe')
+#Sys.setenv(SPOTIFY_CLIENT_SECRET = '8df29b1e87fd42cb88cdbbdb0ed408de')
 
 #access_token <- get_spotify_access_token(
 #  client_id = key_get("spotify_stephyspotifyr_client_id"),
@@ -271,7 +271,8 @@ anova(model.fit)
 - Listen to the AI Today podcast on [Machine Learning Ops](https://podcasts.apple.com/us/podcast/ai-today-podcast-artificial-intelligence-insights-experts/id1279927057?i=1000468771571) and provide your thoughts on the following questions:  
 
 1. Does knowing about Git and GitHub help you in understanding the podcast?  
-
-2. How do you think the ideas of ML OPs will affect your future data science projects?  
-
+  + Yes, the speaker talked about the challenges they faced which is often related to the version control. He mentioned that developers using github and if not knowing how git and github works I might not understand when speaking of pull and push when manipulating the data.
+2. How do you think the ideas of MLOPs will affect your future data science projects?  
+  + I think it will be more efficiency. The speaker introduces that MLOPs is about the merge of engineering, machine learning and dev-ops, so processing through writing the concept, developing, testing and actually running the project, it will reduces the gap of communication. 
+  
 You may also want to check out this article on [Towards Data Science](https://towardsdatascience.com/ml-ops-machine-learning-as-an-engineering-discipline-b86ca4874a3f)
