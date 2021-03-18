@@ -26,18 +26,7 @@ library(ggplot2)
 ```
 
 ```{r}
-library(keyring)
-# key_set("spotify_stephyspotifyr_client_id")
-# key_set("spotify_stephyspotifyr_client_secret")
-
 library(spotifyr)
-#Sys.setenv(SPOTIFY_CLIENT_ID = '94cebeda515b414e8b9fe12c8118adbe')
-#Sys.setenv(SPOTIFY_CLIENT_SECRET = '8df29b1e87fd42cb88cdbbdb0ed408de')
-
-#access_token <- get_spotify_access_token(
-#  client_id = key_get("spotify_stephyspotifyr_client_id"),
-#  client_secret = key_get("spotify_stephyspotifyr_client_secret")
-#)
 
 access_token <- get_spotify_access_token(
   client_id = Sys.getenv("SPOTIFY_CLIENT_ID"),
@@ -47,6 +36,7 @@ access_token <- get_spotify_access_token(
 # Question: Is there a relationship between songs' pitch and the valence of Taylor Swift's albums?
 # Based on the plot and the regression model we can conclude that there is significant positive coefficient between key and valence
 taylorswift <- get_artist_audio_features('Taylor Swift', authorization = get_spotify_access_token())
+taylorswift <- tibble(taylorswift)
 taylorswift %>% 
   ggplot(aes(x = valence, y = key)) +
   geom_smooth(se = F) +
@@ -114,8 +104,6 @@ oscar_df <- tibble(text = ratings_text)
   oscar_df %>% 
     mutate(ismovierank = str_detect(text, "^\\d+\\.$")) -> # find sth like "1."
     oscar_df
-# check how many movies are in the data
-sum(datadf$ismovierank)
 ```
 
 ```{r}
